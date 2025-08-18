@@ -1,11 +1,24 @@
 using System;
 using UnityEngine;
 
-public class InputProcessor : MonoBehaviour
+public interface IVehicleInput
+{
+    event Action<Vector2> OnMoveInput;
+    event Action<bool> OnHandBrakePressed;
+
+    Vector2 GetMoveInput();
+    float GetBrakeInput();
+    bool GetHandBrakePressed();
+}
+public class InputProcessor : MonoBehaviour, IVehicleInput
 {
     public event Action<Vector2> OnMoveInput; // x for steering, y for accel
     public event Action<bool> OnHandBrakePressed; // (space by default)
     private VehicleInputActions _actions;
+
+    private Vector2 moveInput = Vector2.zero;
+    private float brakeInput = 0f; 
+    private bool handBrakePressed = false;
 
     private void Awake()
     {
@@ -34,22 +47,32 @@ public class InputProcessor : MonoBehaviour
 
     private void OnMovePerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        OnMoveInput?.Invoke(ctx.ReadValue<Vector2>());
+        moveInput = ctx.ReadValue<Vector2>();
+        OnMoveInput?.Invoke(moveInput);
     }
 
     private void OnMoveCanceled(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        OnMoveInput?.Invoke(Vector2.zero);
+        moveInput = Vector2.zero;
+        OnMoveInput?.Invoke(moveInput);
     }
+
     private void OnHandBrakePerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        bool isPressed = ctx.ReadValue<float>() > 0.5f;
-        OnHandBrakePressed?.Invoke(isPressed);
+        handBrakePressed = ctx.ReadValue<float>() > 0.5f;
+        OnHandBrakePressed?.Invoke(handBrakePressed);
     }
 
     private void OnHandBrakeCanceled(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        OnHandBrakePressed?.Invoke(false);
+        handBrakePressed = false;
+        OnHandBrakePressed?.Invoke(handBrakePressed);
     }
-}
 
+    
+    public Vector2 GetMoveInput() => moveInput;
+
+    public float GetBrakeInput() => brakeInput; 
+
+    public bool GetHandBrakePressed() => handBrakePressed;
+}

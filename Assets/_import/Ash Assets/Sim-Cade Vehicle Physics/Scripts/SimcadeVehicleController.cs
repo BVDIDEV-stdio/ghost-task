@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -93,7 +94,12 @@ namespace Ashsvp
         public float[] forwardSlip = new float[4], slipCoeff = new float[4], skidTotal = new float[4];
         private WheelSkid[] wheelSkids = new WheelSkid[4];
 
+        [Header("CUSTOM: IVehicleInput interface carrier")]
+        [SerializeField]
+        private MonoBehaviour vehicleInputProvider;
+        public MonoBehaviour VehicleInputProvider => vehicleInputProvider;
 
+        private IVehicleInput vehicleInput;
         void Awake()
         {
             GameObject SkidMarkController_Self = Instantiate(SkidMarkController);
@@ -119,6 +125,15 @@ namespace Ashsvp
             rearTrack = Vector3.Distance(Wheels[0].position, Wheels[1].position);
 
             GearSystem = GetComponent<GearSystem>();
+
+
+
+            //MOD: vehicle input setup
+            vehicleInput = vehicleInputProvider as IVehicleInput;
+            if (vehicleInput == null)
+            {
+                Debug.Log("vehicleInput does not implement IVehicleInput");
+            }
         }
 
 
@@ -130,11 +145,23 @@ namespace Ashsvp
 
 
             // MOD: INPUT SUBS
-            var inputProcessor = GetComponent<InputProcessor>();
-            inputProcessor.OnMoveInput += SetMoveInput;
-            inputProcessor.OnHandBrakePressed += SetBrakeInput;
+            // var inputProcessor = GetComponent<InputProcessor>();
+            // inputProcessor.OnMoveInput += SetMoveInput;
+            // inputProcessor.OnHandBrakePressed += SetBrakeInput;
+            if (vehicleInput != null)
+            {
+                vehicleInput.OnMoveInput += SetMoveInput;
+                vehicleInput.OnHandBrakePressed += SetBrakeInput;
+            }
         }
-
+        void OnDestroy()
+        {
+            if (vehicleInput != null)
+            {
+                vehicleInput.OnMoveInput -= SetMoveInput;
+                vehicleInput.OnHandBrakePressed -= SetBrakeInput;
+            }
+        }
 
 
 

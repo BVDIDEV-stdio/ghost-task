@@ -127,28 +127,52 @@ namespace Ashsvp
             CentreOfMass_ground = (HardPoints[0].localPosition + HardPoints[1].localPosition + HardPoints[2].localPosition + HardPoints[3].localPosition) / 4;
 
             rb.centerOfMass = CentreOfMass_ground;
+
+
+            // MOD: INPUT SUBS
+            var inputProcessor = GetComponent<InputProcessor>();
+            inputProcessor.OnMoveInput += SetMoveInput;
+            inputProcessor.OnHandBrakePressed += SetBrakeInput;
         }
 
-        private void Update() 
+
+
+
+#region ADDED UTILITARY VOIDS
+        void SetMoveInput(Vector2 input)
         {
-            if (CanDrive && CanAccelerate)
-            {
-                accelerationInput = Input.GetAxis("Vertical");
-                steerInput = Input.GetAxis("Horizontal");
-                brakeInput = Input.GetAxis("Jump");
-            }
-            else if(CanDrive && !CanAccelerate)
-            {
-                accelerationInput = 0;
-                steerInput = Input.GetAxis("Horizontal");
-                brakeInput = Input.GetAxis("Jump");
-            }
-            else
-            {
-                accelerationInput = 0;
-                steerInput = 0;
-                brakeInput = 1;
-            }
+            steerInput = input.x; // instead of "Horizontal"
+            accelerationInput = input.y; //instead of "Vertical"
+        }
+        void SetBrakeInput(bool isPressed)
+        {
+            brakeInput = isPressed ? 1f : 0f;
+        }
+#endregion
+
+
+
+        private void Update() //TODO change to INputSystem event voids
+        {
+            // if (CanDrive && CanAccelerate)
+            // {
+            //     accelerationInput = Input.GetAxis("Vertical");
+            //     steerInput = Input.GetAxis("Horizontal");
+            //     brakeInput = Input.GetAxis("Jump");
+            //     Debug.Log("EPTA: " + Input.GetAxis("Jump"));
+            // }
+            // else if (CanDrive && !CanAccelerate)
+            // {
+            //     accelerationInput = 0;
+            //     steerInput = Input.GetAxis("Horizontal");
+            //     brakeInput = Input.GetAxis("Jump");
+            // }
+            // else
+            // {
+            //     accelerationInput = 0;
+            //     steerInput = 0;
+            //     brakeInput = 1;
+            // }
 
         }
 

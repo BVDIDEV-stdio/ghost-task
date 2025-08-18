@@ -748,7 +748,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: c51bbca3ddd373e498c4f2cf3bc36fb1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -786,6 +786,7 @@ GameObject:
   - component: {fileID: 8052374149986183080}
   - component: {fileID: 383743862031282480}
   - component: {fileID: 8398994453028395626}
+  - component: {fileID: 8480249288056138713}
   m_Layer: 0
   m_Name: car_player
   m_TagString: Untagged
@@ -827,7 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   springForce: 40000
-  springDamper: 3000
+  springDamper: 3000.2
   MaxSpeed: 100
   Acceleration: 30
   AccelerationCurve:
@@ -944,11 +945,11 @@ MonoBehaviour:
   AutoCounterSteer: 1
   DownForce: 5
   VehicleBody: {fileID: 1492141590172561736}
-  forwardBodyTilt: 3
-  sidewaysBodyTilt: 3
+  forwardBodyTilt: 1.67
+  sidewaysBodyTilt: 1.91
   WheelSkid: {fileID: 2025219559821310255, guid: af3816ee804421147aa3d559bed73abe, type: 3}
   SkidMarkController: {fileID: 3448449532128340351, guid: 6b34807611a5d104f884f8b618046774, type: 3}
-  wheelRadius: 0.38102162
+  wheelRadius: 0.4
   skidmarkWidth: 0.3286417
   HardPoints:
   - {fileID: 7054660908023697661}
@@ -1260,6 +1261,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e63e9b5fd272649499f3444be7c348de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8480249288056138713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6253703368205966895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf2a751a7c026f41882fae3d834ee49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7323353454761675587

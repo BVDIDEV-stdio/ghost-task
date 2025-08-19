@@ -1,14 +1,11 @@
 using System;
 using UnityEngine;
 
+//TODO explain
 public interface IVehicleInput
 {
     event Action<Vector2> OnMoveInput;
     event Action<bool> OnHandBrakePressed;
-
-    Vector2 GetMoveInput();
-    float GetBrakeInput();
-    bool GetHandBrakePressed();
 }
 public class InputProcessor : MonoBehaviour, IVehicleInput
 {
@@ -16,8 +13,8 @@ public class InputProcessor : MonoBehaviour, IVehicleInput
     public event Action<bool> OnHandBrakePressed; // (space by default)
     private VehicleInputActions _actions;
 
+    //those below will store values to pass into subscribers
     private Vector2 moveInput = Vector2.zero;
-    private float brakeInput = 0f; 
     private bool handBrakePressed = false;
 
     private void Awake()
@@ -68,11 +65,4 @@ public class InputProcessor : MonoBehaviour, IVehicleInput
         handBrakePressed = false;
         OnHandBrakePressed?.Invoke(handBrakePressed);
     }
-
-    
-    public Vector2 GetMoveInput() => moveInput;
-
-    public float GetBrakeInput() => brakeInput; 
-
-    public bool GetHandBrakePressed() => handBrakePressed;
 }

@@ -97,7 +97,14 @@ namespace Ashsvp
         [Header("CUSTOM: IVehicleInput interface carrier")]
         [SerializeField]
         private MonoBehaviour vehicleInputProvider;
-        public MonoBehaviour VehicleInputProvider => vehicleInputProvider;
+        public MonoBehaviour VehicleInputProvider
+        {
+            get => vehicleInputProvider;
+            set
+            {
+                vehicleInputProvider = value;
+            }
+        }
 
         private IVehicleInput vehicleInput;
         void Awake()
@@ -165,15 +172,27 @@ namespace Ashsvp
 
 
 
-#region ADDED UTILITARY VOIDS
-        void SetMoveInput(Vector2 input)
+        #region ADDED UTILITARY VOIDS
+        public void SetMoveInput(Vector2 input)
         {
-            steerInput = input.x; // instead of "Horizontal"
-            accelerationInput = input.y; //instead of "Vertical"
+            if (CanDrive)
+            {
+
+                steerInput = input.x; // instead of old input "Horizontal"
+                accelerationInput = input.y; //instead of old input "Vertical"
+            }
+            else
+            {
+                steerInput = 0f;
+                accelerationInput = 0f;
+            }
         }
-        void SetBrakeInput(bool isPressed)
+        public void SetBrakeInput(bool isPressed)
         {
-            brakeInput = isPressed ? 1f : 0f;
+            if (CanDrive)
+                brakeInput = isPressed ? 1f : 0f;
+            else
+                brakeInput = 1f;
         }
 #endregion
 
@@ -186,7 +205,6 @@ namespace Ashsvp
             //     accelerationInput = Input.GetAxis("Vertical");
             //     steerInput = Input.GetAxis("Horizontal");
             //     brakeInput = Input.GetAxis("Jump");
-            //     Debug.Log("EPTA: " + Input.GetAxis("Jump"));
             // }
             // else if (CanDrive && !CanAccelerate)
             // {

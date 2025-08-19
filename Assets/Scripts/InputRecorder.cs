@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
-
 // public class InputRecorder : MonoBehaviour
 // {
 //     public struct InputFrame
@@ -63,6 +59,9 @@ using UnityEngine.InputSystem;
 //     }
 // }
 // preserved in case of foxtrot uniform
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum ActionType {Move, HandBrake}
 public struct InputEvent
@@ -92,6 +91,7 @@ public class InputRecorder : MonoBehaviour
     {
         if (move != lastMoveInput)
         {
+            Debug.Log("I spy with my little eye");
             RecordedInput.Add(new InputEvent
             {
                 timestamp = Time.time - startTime,
@@ -105,6 +105,7 @@ public class InputRecorder : MonoBehaviour
     {
         if (pressed != lastHandBrake)
         {
+            Debug.Log("I spy with my little eye her too");
             RecordedInput.Add(new InputEvent
             {
                 timestamp = Time.time - startTime,

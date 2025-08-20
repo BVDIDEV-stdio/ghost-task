@@ -46,7 +46,7 @@ public class RoundManager : MonoBehaviour
         SceneReset();
 
 
-        //ROUND 2
+        //ROUND 2 // TODO add softlock protection
         uIManager.ShowPreRaceText("GHOST RACE", 1.5f);
         yield return new WaitForSeconds(1.5f);
 

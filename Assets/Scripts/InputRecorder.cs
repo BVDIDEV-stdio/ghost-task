@@ -76,8 +76,9 @@ public class InputRecorder : MonoBehaviour
     private float startTime;
     public List<InputEvent> RecordedInput = new List<InputEvent>();
 
-    private Vector2 lastMoveInput = Vector2.zero;
-    private bool lastHandBrake = false;
+    // Входные переменные
+    private Vector2 currentMove = Vector2.zero;
+    private bool currentHandBrake = false;
 
     private InputProcessor inputProcessor;
     public void Initialize(InputProcessor processor)
@@ -87,39 +88,50 @@ public class InputRecorder : MonoBehaviour
         inputProcessor.OnMoveInput += OnMoveInput;
         inputProcessor.OnHandBrakePressed += OnHandBrakePressed;
     }
+
     private void OnMoveInput(Vector2 move)
     {
-        if (move != lastMoveInput)
-        {
-            Debug.Log("I spy with my little eye");
-            RecordedInput.Add(new InputEvent
-            {
-                timestamp = Time.time - startTime,
-                actionType = ActionType.Move,
-                val = move
-            });
-            lastMoveInput = move;
-        }
+        currentMove = move;
     }
+
     private void OnHandBrakePressed(bool pressed)
     {
-        if (pressed != lastHandBrake)
-        {
-            Debug.Log("I spy with my little eye her too");
-            RecordedInput.Add(new InputEvent
-            {
-                timestamp = Time.time - startTime,
-                actionType = ActionType.HandBrake,
-                val = pressed
-            });
-            lastHandBrake = pressed;
-        }
+        currentHandBrake = pressed;
     }
-    void Start()
+
+    private void Start()
     {
         startTime = Time.time;
     }
-    void OnDestroy()
+    // Allow me to explain:  
+    // Adding input records in every `FixedUpdate` has proven to maintain more precise 
+    // inputs for InputReplay to replay than the event-recording method.  
+    
+    // One might assume that event-triggered input recording would be sufficient if 
+    // the controlled pawn (car) does not use a Rigidbody 
+    // as Rigidbody physics is prone to error accumulation.  
+
+    // That - however - is not my case.
+    private void FixedUpdate()
+    {
+        InputEvent frame = new InputEvent
+        {
+            timestamp = Time.time - startTime,
+            actionType = ActionType.Move,
+            val = currentMove
+        };
+        RecordedInput.Add(frame);
+
+        InputEvent brakeFrame = new InputEvent
+        {
+            timestamp = Time.time - startTime,
+            actionType = ActionType.HandBrake,
+            val = currentHandBrake
+        };
+        RecordedInput.Add(brakeFrame);
+    }
+
+    private void OnDestroy()
     {
         if (inputProcessor != null)
         {

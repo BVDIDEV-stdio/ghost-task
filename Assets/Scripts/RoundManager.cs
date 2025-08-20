@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Ashsvp;
+using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class RoundManager : MonoBehaviour
         SceneReset();
 
 
-        //ROUND 2 // TODO add softlock protection
+        //ROUND 2
         uIManager.ShowPreRaceText("GHOST RACE", 1.5f);
         yield return new WaitForSeconds(1.5f);
 
@@ -54,7 +55,7 @@ public class RoundManager : MonoBehaviour
         yield return uIManager.CountdownCoroutine(3);
 
         StartRoundTwo();
-        yield return new WaitUntil(() => playerFinished && ghostFinished);
+        yield return new WaitUntil(() => playerFinished || ghostFinished);
         ShowWinner();
         yield return new WaitForSeconds(4f);
         QuitScene();
@@ -65,6 +66,7 @@ public class RoundManager : MonoBehaviour
         playerFinished = false;
 
         player = Instantiate(playerCarPrefab, pos1.position, pos1.rotation);
+        mainCamera.GetComponent<CinemachineBrain>().enabled = true;
 
         inputRecorder = player.AddComponent<InputRecorder>();
         var inputProcessor = player.GetComponent<InputProcessor>();
@@ -97,7 +99,7 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    private void OnAnyFinish(GameObject car)
+    private void OnAnyFinish(GameObject car) // TODO de-trick
     {
         if (winnerGO == null)
         {

@@ -105,8 +105,8 @@ public class InputRecorder : MonoBehaviour
     }
     // Allow me to explain:  
     // Adding input records in every `FixedUpdate` has proven to maintain more precise 
-    // inputs for InputReplay to replay than the event-recording method.  
-    
+    // inputs for InputReplay to... replay than the event-recording method.  
+
     // One might assume that event-triggered input recording would be sufficient if 
     // the controlled pawn (car) does not use a Rigidbody 
     // as Rigidbody physics is prone to error accumulation.  
